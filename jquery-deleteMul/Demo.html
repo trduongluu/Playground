@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>Hello word</h1>
+            <div class="col-md-4" id="list_entities">
+            </div>
+            <div class=" col-md-4 action">
+                <input type="button" value="delete" class="btn btn-danger deleted">
+            </div>
+            <div class=" col-md-4">
+                <pre id="json"></pre>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    // 
+    let ListEntities = [];
+    for (let i = 0; i < 10; ++i) {
+        ListEntities.push({
+            entitiesId: i + 1,
+            entitiesName: `Entities Name ${i + 1}`,
+            desciption: `desciption Entities ${i + 1}`,
+            isSelected: false
+        });
+    }
+    let listData = document.getElementById('list_entities');
+    let entitiList = '';
+    for (let i = 0; i < ListEntities.length; i++) {
+        entitiList += `<div class='itemId'>`
+            // +`<div class='name'> ${ListEntities[i].entitiesId} </div>`
+                + `<p class='name'> ${ListEntities[i].entitiesName} </p>`
+                + `<p class='desc'> ${ListEntities[i].desciption} </p>`
+                + `<p><input type="checkbox" class="check-item" id='${ListEntities[i].entitiesId}'> Go check</p>`
+            + `</div>`
+    }
+    listData.innerHTML = entitiList
+    document.getElementById("json").innerHTML = JSON.stringify(ListEntities, undefined, 2);
+
+    // start function thay đổi selected
+    changeSelected = () => {
+        let inputSelected = $('.itemId').find('input:checked');
+        let ids = []
+        for (let index = 0; index < inputSelected.length; index++) {
+            const element = inputSelected[index];
+            ids.push(+$(element).attr('id'))
+        }
+        ListEntities.forEach(x => x.isSelected = ids.includes(x.entitiesId))
+        document.getElementById("json").innerHTML = JSON.stringify(ListEntities, undefined, 2);
+    }
+    //end
+
+
+    // thay đổi state theo class
+    $(document).on('change', '.check-item', changeSelected);
+    
+    //start delete Selected
+    $(document).on('click', '.deleted', function () {
+        let inputSelected = $('.itemId').find('input:checked')
+        let trSelected = inputSelected.parents('.itemId');
+
+        if (trSelected.length == 0) {
+            alert("ko có phần tử nào")
+            return;
+        } else {
+            let ids = []
+            for (let index = 0; index < inputSelected.length; index++) {
+                const element = inputSelected[index];
+                ids.push(+$(element).attr('id'))
+            }
+            trSelected.remove();
+            ListEntities = ListEntities.filter(x => !ids.includes(x.entitiesId))
+            changeSelected();
+        }
+    });
+    //end
+
+</script>
+
+</html>

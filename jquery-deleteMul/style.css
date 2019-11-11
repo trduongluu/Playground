@@ -1,0 +1,19 @@
+.itemId {
+    border-bottom: 1px solid gray;
+}
+.itemId:last-child{
+    border: unset;
+}
+.itemId .name {
+    color: brown;
+    font-weight: bold;
+    padding: 10px 0;
+}
+.itemId .desc{
+    color: cadetblue;
+    padding: 5px 0;
+}
+#list_entities {
+    display: inline-block !important;
+    padding: 10px 0;
+}
